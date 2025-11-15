@@ -383,9 +383,9 @@ function showError(message) {
     jsonTree.innerHTML = `<div class="error">${message}</div>`;
 }
 
-// Auto-load example on start
-window.addEventListener('load', () => {
-    jsonInput.value = JSON.stringify(exampleJSON, null, 2);
-    jsonData = exampleJSON;
-    renderTree(exampleJSON);
-});
+// Auto-load example on start (disabled - page starts blank)
+// window.addEventListener('load', () => {
+//     jsonInput.value = JSON.stringify(exampleJSON, null, 2);
+//     jsonData = exampleJSON;
+//     renderTree(exampleJSON);
+// });
