@@ -7,53 +7,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>JSON Viewer</h1>
-            <p>Format and visualize JSON data</p>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" data-tab="viewer">Viewer</button>
+            <button class="tab" data-tab="text">Text</button>
         </div>
-    </header>
 
-    <main class="container">
         <div class="controls">
-            <button id="formatBtn" class="btn btn-primary">Format JSON</button>
-            <button id="clearBtn" class="btn btn-secondary">Clear</button>
-            <button id="exampleBtn" class="btn btn-secondary">Load Example</button>
-            <label for="fileInput" class="btn btn-secondary">
-                Import File
-                <input type="file" id="fileInput" accept=".json" style="display: none;">
-            </label>
-            <button id="expandAllBtn" class="btn btn-secondary">Expand All</button>
-            <button id="collapseAllBtn" class="btn btn-secondary">Collapse All</button>
+            <button id="copyBtn" class="btn">Copy</button>
+            <button id="formatBtn" class="btn">Format</button>
+            <button id="removeWhitespaceBtn" class="btn">Remove white space</button>
+            <button id="clearBtn" class="btn">Clear</button>
+            <button id="aboutBtn" class="btn about-btn">About</button>
         </div>
 
-        <div class="panels">
-            <div class="panel input-panel">
-                <h2>Input JSON</h2>
-                <textarea id="jsonInput" placeholder='Paste your JSON here or click "Load Example"'></textarea>
-            </div>
-
-            <div class="panel output-panel">
-                <div class="panel-header">
-                    <h2>Formatted View</h2>
-                    <button id="copyBtn" class="btn btn-copy" title="Copy to clipboard">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Z"/>
-                            <path d="M2 6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2h-1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h2V6H2Z"/>
-                        </svg>
-                        Copy
-                    </button>
-                </div>
-                <div id="jsonOutput" class="json-tree"></div>
-            </div>
+        <div id="viewer-tab" class="tab-content active">
+            <textarea id="jsonInput" placeholder="Paste the JSON code here (your code is not saved anywhere)"></textarea>
         </div>
-    </main>
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2024 JSON Viewer - A simple tool for viewing and formatting JSON</p>
+        <div id="text-tab" class="tab-content">
+            <div id="jsonOutput"></div>
         </div>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>

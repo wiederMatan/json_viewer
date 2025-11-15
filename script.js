@@ -4,53 +4,101 @@ const jsonInput = document.getElementById('jsonInput');
 const jsonOutput = document.getElementById('jsonOutput');
 const formatBtn = document.getElementById('formatBtn');
 const clearBtn = document.getElementById('clearBtn');
-const exampleBtn = document.getElementById('exampleBtn');
-const fileInput = document.getElementById('fileInput');
-const expandAllBtn = document.getElementById('expandAllBtn');
-const collapseAllBtn = document.getElementById('collapseAllBtn');
 const copyBtn = document.getElementById('copyBtn');
+const removeWhitespaceBtn = document.getElementById('removeWhitespaceBtn');
+const aboutBtn = document.getElementById('aboutBtn');
+
+// Tab functionality
+const tabs = document.querySelectorAll('.tab');
+const viewerTab = document.getElementById('viewer-tab');
+const textTab = document.getElementById('text-tab');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const tabName = tab.getAttribute('data-tab');
+
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('active'));
+
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Show/hide tab content
+        if (tabName === 'viewer') {
+            viewerTab.classList.add('active');
+            textTab.classList.remove('active');
+        } else {
+            viewerTab.classList.remove('active');
+            textTab.classList.add('active');
+        }
+    });
+});
 
 // Example JSON data
 const exampleJSON = {
-    "name": "John Doe",
-    "age": 30,
-    "email": "john.doe@example.com",
-    "address": {
-        "street": "123 Main St",
-        "city": "New York",
-        "state": "NY",
-        "zipCode": "10001"
-    },
-    "phoneNumbers": [
-        {
-            "type": "home",
-            "number": "212-555-1234"
-        },
-        {
-            "type": "mobile",
-            "number": "646-555-5678"
-        }
-    ],
-    "hobbies": ["reading", "traveling", "photography"],
-    "isActive": true,
-    "balance": 1234.56,
-    "registeredDate": "2024-01-15T10:30:00Z"
+    "user": "matanwieder",
+    "name": "John",
+    "age": 30
 };
+
+// Copy button click handler
+copyBtn.addEventListener('click', async () => {
+    const inputText = jsonInput.value.trim();
+
+    if (!inputText) {
+        alert('No JSON to copy');
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(inputText);
+
+        // Show feedback
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+        }, 2000);
+    } catch (error) {
+        alert('Failed to copy to clipboard');
+    }
+});
 
 // Format JSON button click handler
 formatBtn.addEventListener('click', () => {
     const inputText = jsonInput.value.trim();
 
     if (!inputText) {
-        showError('Please enter some JSON data');
+        alert('Please enter some JSON data');
         return;
     }
 
     try {
         const jsonData = JSON.parse(inputText);
+        jsonInput.value = JSON.stringify(jsonData, null, 2);
         renderJSON(jsonData);
+
+        // Switch to text tab to show the tree view
+        tabs[1].click();
     } catch (error) {
-        showError('Invalid JSON: ' + error.message);
+        alert('Invalid JSON: ' + error.message);
+    }
+});
+
+// Remove whitespace button click handler
+removeWhitespaceBtn.addEventListener('click', () => {
+    const inputText = jsonInput.value.trim();
+
+    if (!inputText) {
+        alert('Please enter some JSON data');
+        return;
+    }
+
+    try {
+        const jsonData = JSON.parse(inputText);
+        jsonInput.value = JSON.stringify(jsonData);
+    } catch (error) {
+        alert('Invalid JSON: ' + error.message);
     }
 });
 
@@ -60,83 +108,9 @@ clearBtn.addEventListener('click', () => {
     jsonOutput.innerHTML = '';
 });
 
-// Example button click handler
-exampleBtn.addEventListener('click', () => {
-    jsonInput.value = JSON.stringify(exampleJSON, null, 2);
-    renderJSON(exampleJSON);
-});
-
-// File input change handler
-fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const jsonData = JSON.parse(e.target.result);
-                jsonInput.value = JSON.stringify(jsonData, null, 2);
-                renderJSON(jsonData);
-            } catch (error) {
-                showError('Invalid JSON file: ' + error.message);
-            }
-        };
-        reader.readAsText(file);
-    }
-});
-
-// Expand all button click handler
-expandAllBtn.addEventListener('click', () => {
-    const allCollapsible = document.querySelectorAll('.collapsible');
-    allCollapsible.forEach(item => {
-        item.classList.add('expanded');
-    });
-});
-
-// Collapse all button click handler
-collapseAllBtn.addEventListener('click', () => {
-    const allCollapsible = document.querySelectorAll('.collapsible');
-    allCollapsible.forEach(item => {
-        item.classList.remove('expanded');
-    });
-});
-
-// Copy button click handler
-copyBtn.addEventListener('click', async () => {
-    const inputText = jsonInput.value.trim();
-
-    if (!inputText) {
-        showError('No JSON to copy');
-        return;
-    }
-
-    try {
-        // Parse to validate, then stringify with formatting
-        const jsonData = JSON.parse(inputText);
-        const formattedJSON = JSON.stringify(jsonData, null, 2);
-
-        // Copy to clipboard
-        await navigator.clipboard.writeText(formattedJSON);
-
-        // Show success feedback
-        const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-            </svg>
-            Copied!
-        `;
-        copyBtn.classList.add('copied');
-
-        // Reset button after 2 seconds
-        setTimeout(() => {
-            copyBtn.innerHTML = originalText;
-            copyBtn.classList.remove('copied');
-        }, 2000);
-
-    } catch (error) {
-        showError('Invalid JSON: ' + error.message);
-    }
+// About button click handler
+aboutBtn.addEventListener('click', () => {
+    alert('JSON Viewer\n\nA simple tool for viewing and formatting JSON data.\n\nPaste your JSON, format it, and visualize it in a tree structure.');
 });
 
 // Render JSON as a tree structure
@@ -147,7 +121,7 @@ function renderJSON(data, container = jsonOutput) {
 }
 
 // Create JSON tree element
-function createJSONTree(data, key = null, isLast = true) {
+function createJSONTree(data, key = null) {
     const div = document.createElement('div');
     div.className = 'json-node';
 
@@ -155,7 +129,6 @@ function createJSONTree(data, key = null, isLast = true) {
 
     if (type === 'object' || type === 'array') {
         const isArray = Array.isArray(data);
-        const entries = isArray ? data : Object.entries(data);
         const isEmpty = isArray ? data.length === 0 : Object.keys(data).length === 0;
 
         // Create collapsible header
@@ -199,13 +172,13 @@ function createJSONTree(data, key = null, isLast = true) {
 
             if (isArray) {
                 data.forEach((item, index) => {
-                    const child = createJSONTree(item, index, index === data.length - 1);
+                    const child = createJSONTree(item, index);
                     content.appendChild(child);
                 });
             } else {
                 const keys = Object.keys(data);
-                keys.forEach((k, index) => {
-                    const child = createJSONTree(data[k], k, index === keys.length - 1);
+                keys.forEach((k) => {
+                    const child = createJSONTree(data[k], k);
                     content.appendChild(child);
                 });
             }
@@ -270,9 +243,3 @@ function getType(value) {
 function showError(message) {
     jsonOutput.innerHTML = `<div class="error">${message}</div>`;
 }
-
-// Load example on page load
-window.addEventListener('load', () => {
-    jsonInput.value = JSON.stringify(exampleJSON, null, 2);
-    renderJSON(exampleJSON);
-});
