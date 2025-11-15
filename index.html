@@ -22,11 +22,34 @@
         </div>
 
         <div id="viewer-tab" class="tab-content active">
-            <textarea id="jsonInput" placeholder="Paste the JSON code here (your code is not saved anywhere)"></textarea>
+            <div class="split-container">
+                <div class="tree-panel">
+                    <div id="jsonTree"></div>
+                </div>
+                <div class="property-panel">
+                    <table id="propertyTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="propertyTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="search-bar">
+                <label>Search:</label>
+                <input type="text" id="searchInput" placeholder="">
+                <button id="searchGoBtn" class="search-btn">GO!</button>
+                <button id="searchNextBtn" class="search-btn">Next</button>
+                <button id="searchPrevBtn" class="search-btn">Previous</button>
+            </div>
         </div>
 
         <div id="text-tab" class="tab-content">
-            <div id="jsonOutput"></div>
+            <textarea id="jsonInput" placeholder="Paste the JSON code here (your code is not saved anywhere)"></textarea>
         </div>
     </div>
 
